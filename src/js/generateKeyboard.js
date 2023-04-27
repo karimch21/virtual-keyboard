@@ -5,13 +5,15 @@ class GenerateKeyboard{
     this.settings = {
       lang: 'en',
       capsLock: 'unshift',
-      content: ''
+      content: 'mmkmk'
     }
   }
   createKeyboard(){
     this.setDataLs()
     let keyboard = document.createElement('div');
     let keyboardInnerEl = document.createElement('div');
+    keyboard.classList.add('keyboard');
+    keyboardInnerEl.classList.add('keyboard__inner')
     let data = this.getDataLs();
     for(let keysRow in keys[data.lang][data.capsLock]){
       let keyRowEl = document.createElement('div');
