@@ -1,2 +1,5 @@
 import '../style/global.sass';
-import '../js/viewKeyboard'
+import GenerateKeyboard from '../js/generateKeyboard'
+
+let generateKeyboard = new GenerateKeyboard();
+generateKeyboard.init()
