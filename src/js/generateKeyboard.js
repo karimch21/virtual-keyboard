@@ -1,10 +1,10 @@
-import keys from './keys';
+import {keys, keysView} from './keys';
 import ControlKeyboard from './useKeyboard';
 
 class GenerateKeyboard{
   constructor(){
     this.settings = {
-      lang: 'en',
+      lang: navigator.language,
       capsLock: 'unshift',
       content: 'mmkmk'
     }
@@ -24,14 +24,16 @@ class GenerateKeyboard{
     keyboard.classList.add('keyboard');
     keyboardInnerEl.classList.add('keyboard__inner')
     let data = this.getDataLs();
-    for(let keysRow in keys[data.lang][data.capsLock]){
+    console.log(keysView)
+    for(let keysRow in keysView[data.lang][data.capsLock]){
       let keyRowEl = document.createElement('div');
       keyRowEl.classList.add('keyboard__row');
       
-      for(let key of keys[data.lang][data.capsLock][keysRow]){
+      for(let key of keysView[data.lang][data.capsLock][keysRow]){
         let keyEl = document.createElement('div');
         keyEl.classList.add('keyboard__key');
-        keyEl.textContent = key;
+        keyEl.textContent = key[1];
+        keyEl.dataset.keyCode = key[0]
         keyRowEl.appendChild(keyEl);
       }
       keyboardInnerEl.appendChild(keyRowEl)
@@ -53,12 +55,19 @@ class GenerateKeyboard{
   }
   getDataLs(){
     if(!localStorage.getItem('settings')) new Error('Data are empty');
-    console.log(localStorage.getItem('settings'))
+    
     return JSON.parse(localStorage.getItem('settings'))
   }
   loadDom(){
     document.body.appendChild(this.createKeyboard())
     this.showContent()
+    let windowContent = document.querySelector('.content-box__inner');
+    if(windowContent){
+      let control = (new ControlKeyboard())
+      window.addEventListener('keydown', (e)=>{
+        control.keydownKeyHandler(e)
+      })
+    }
   }
   showContent(){
     document.body.prepend(this.createContentBlock());
