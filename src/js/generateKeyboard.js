@@ -6,7 +6,7 @@ class GenerateKeyboard{
     this.settings = {
       lang: navigator.language,
       capsLock: 'unshift',
-      content: 'mmkmk'
+      content: `Input text`
     }
   }
   init(){
@@ -14,8 +14,13 @@ class GenerateKeyboard{
       this.loadDom()
     });
     window.addEventListener('click',(e)=>{
-      (new ControlKeyboard()).windowClickHandler(e)
+      (new ControlKeyboard()).windowClickHandler(e);
     });
+    window.addEventListener('keyup', (e)=>{
+      (new ControlKeyboard()).keyupKeyHandler(e);
+    
+    })
+    
   }
   createKeyboard(){
     if(!this.getDataLs())  this.setDataLs()
@@ -40,6 +45,13 @@ class GenerateKeyboard{
     }
     keyboard.appendChild(keyboardInnerEl);
     return keyboard;
+  }
+  switchKeys(){
+    let keysEl = document.querySelectorAll('.keyboard__key');
+    let setts = this.getDataLs();
+    for(let keyEl of keysEl){
+      keyEl.textContent = keys[setts.lang][setts.capsLock][keyEl.dataset.keyCode];
+    }
   }
   createContentBlock(){
     let windowContent = document.createElement('div');
@@ -81,3 +93,4 @@ class GenerateKeyboard{
 }
 
 export default GenerateKeyboard;
+

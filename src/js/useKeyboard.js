@@ -1,12 +1,14 @@
 
 import GenerateKeyboard from './generateKeyboard';
 import {keysView, keys} from './keys';
+import HandlingKeys from './handling'
 
 class ControlKeyboard{
   constructor(){
     this.genData = new GenerateKeyboard();
-    this.specialKey = ['tab','capslock','alt', '', 'ctrl', 'backspace',"left","down", "right", "shift","up","win", "enter"];
+    this.specialKey = ['tab','capslock','alt', '', 'ctrl', 'backspace',"left","down", "right", "shift","up","win", "enter", "space"];
     this.keydownSpecKeys = []
+    this.handlingKeys = new HandlingKeys();
   }
   clickKeyHandler(keyEl){
     let keyCodeEl = +keyEl.dataset.keyCode
@@ -14,24 +16,59 @@ class ControlKeyboard{
     this.changeContent(keyCodeEl)
   }
   keydownKeyHandler(e){
-    console.log(11)
+ 
     this.switchLang(e)
     let keysEl = document.querySelector(`[data-key-code="${e.keyCode}"]`);
     this.addKeyActiveStyle(keysEl)
- 
-    
     this.changeContent(e.keyCode)
   }
-  changeContent(keyCodeEl){
+  keyupKeyHandler(e){
    
     let setts = this.genData.getDataLs()
+    let valKey = keys[setts.lang][setts.capsLock][e.keyCode]
+    let keyEl = document.querySelector(`[data-key-code="${e.keyCode}"]`);
+  
+    let data = null;
+    
+ 
+    if(valKey === 'shift'){
+      console.log(11122)
+      // data = this.handlingKeys.handlingShiftUp(setts,valKey,e.keyCode)
+      // this.genData.setDataLs(data)
+    }
+    // this.genData.switchKeys()
+    
+  }
+  
+  changeContent(keyCodeEl){
+    let setts = this.genData.getDataLs()
     let valKey = keys[setts.lang][setts.capsLock][keyCodeEl]
-    console.log(valKey)
+    
+    let data = null;
+   
+    if(valKey === 'enter'){
+      data = this.handlingKeys.handlingEnter(setts,valKey,keyCodeEl)
+      this.genData.setDataLs(data)
+    }
+    if(valKey === 'space'){
+      data = this.handlingKeys.handlingSpace(setts,valKey,keyCodeEl)
+      this.genData.setDataLs(data)
+    }
+
+    if(valKey === 'shift' || valKey === 'caps lock'){
+      data = this.handlingKeys.handlingShift(setts,valKey,keyCodeEl)
+      this.genData.setDataLs(data)
+      this.genData.switchKeys()
+      return
+    }
+
+   
+    
     if(!this.specialKey.includes(valKey) && setts){
       setts.content += valKey;
       this.genData.setDataLs(setts)
-      this.genData.changeWindowContent()
     }
+    this.genData.changeWindowContent()
   }
   switchLang(e){
     let setts = this.genData.getDataLs()
@@ -46,11 +83,13 @@ class ControlKeyboard{
         console.log(1)
         setts.lang = 'ru'
         this.genData.setDataLs(setts)
+        this.genData.switchKeys()
       } 
       else{
         console.log(2)
         setts.lang = 'en'
         this.genData.setDataLs(setts)
+        this.genData.switchKeys()
       }
       this.keydownSpecKeys = []
       // console.log(setts)
@@ -75,3 +114,4 @@ class ControlKeyboard{
 
 
 export default ControlKeyboard
+
