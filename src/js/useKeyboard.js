@@ -1,91 +1,159 @@
 
 import GenerateKeyboard from './generateKeyboard';
-import {keysView, keys} from './keys';
+import { keysView, keys, dataKeys} from './keys';
 import HandlingKeys from './handling'
 
-class ControlKeyboard{
-  constructor(){
+class ControlKeyboard {
+  constructor() {
     this.genData = new GenerateKeyboard();
-    this.specialKey = ['tab','capslock','alt', '', 'ctrl', 'backspace',"left","down", "right", "shift","up","win", "enter", "space"];
+    this.specialKey = ['tab', 'capslock', 'alt', '', 'ctrl', 'backspace', "left", "down", "right", "shift", "up", "win", "enter", "space"];
     this.keydownSpecKeys = []
     this.handlingKeys = new HandlingKeys();
   }
-  clickKeyHandler(keyEl){
+  clickKeyHandler(keyEl) {
     let keyCodeEl = +keyEl.dataset.keyCode
     this.addKeyActiveStyle(keyEl)
     this.changeContent(keyCodeEl)
   }
-  keydownKeyHandler(e){
- 
+  keydownKeyHandler(e) {
+
     this.switchLang(e)
     let keysEl = document.querySelector(`[data-key-code="${e.keyCode}"]`);
     this.addKeyActiveStyle(keysEl)
     this.changeContent(e.keyCode)
   }
-  keyupKeyHandler(e){
-   
+  keyupKeyHandler(e) {
+
     let setts = this.genData.getDataLs()
-    let valKey = keys[setts.lang][setts.capsLock][e.keyCode]
+    let valKey = keys[setts.lang][setts.shift][e.keyCode]
     let keyEl = document.querySelector(`[data-key-code="${e.keyCode}"]`);
-  
+
     let data = null;
-    
- 
-    if(valKey === 'shift'){
-      console.log(11122)
-      // data = this.handlingKeys.handlingShiftUp(setts,valKey,e.keyCode)
-      // this.genData.setDataLs(data)
+
+
+    if (valKey === 'shift') {
+      console.log('-------keyUp-------')
+      data = this.handlingKeys.handlingShiftUp(setts, valKey, e.keyCode)
+      console.log(data, 'data')
+      if (data) {
+        console.log(77)
+        this.genData.setDataLs(data)
+        this.genData.switchKeys()
+      }
+      console.log('END-------keyUp-------')
     }
-    // this.genData.switchKeys()
-    
   }
-  
-  changeContent(keyCodeEl){
+
+  changeContent(keyCodeEl) {
     let setts = this.genData.getDataLs()
-    let valKey = keys[setts.lang][setts.capsLock][keyCodeEl]
-    
+    let valKey = keys[setts.lang][setts.shift][keyCodeEl]
+
     let data = null;
-   
-    if(valKey === 'enter'){
-      data = this.handlingKeys.handlingEnter(setts,valKey,keyCodeEl)
+
+    if (valKey === 'enter') {
+      data = this.handlingKeys.handlingEnter(setts, valKey, keyCodeEl)
       this.genData.setDataLs(data)
     }
-    if(valKey === 'space'){
-      data = this.handlingKeys.handlingSpace(setts,valKey,keyCodeEl)
+    if (valKey === 'space') {
+      data = this.handlingKeys.handlingSpace(setts, valKey, keyCodeEl)
       this.genData.setDataLs(data)
     }
 
-    if(valKey === 'shift' || valKey === 'caps lock'){
-      data = this.handlingKeys.handlingShift(setts,valKey,keyCodeEl)
-      this.genData.setDataLs(data)
-      this.genData.switchKeys()
+    if (valKey === 'shift') {
+      data = this.handlingKeys.handlingShift(setts, valKey, keyCodeEl)
+      if (data) {
+        this.genData.setDataLs(data)
+        this.switchShiftKeys()
+      }
       return
     }
 
-   
-    
-    if(!this.specialKey.includes(valKey) && setts){
+    if (valKey === 'caps lock') {
+      data = this.handlingKeys.handlingCaps(setts, valKey, keyCodeEl)
+      if (data) {
+        this.genData.setDataLs(data)
+        this.switchCapsKeys()
+      }
+    }
+
+    if (!this.specialKey.includes(valKey) && setts) {
       setts.content += valKey;
       this.genData.setDataLs(setts)
     }
     this.genData.changeWindowContent()
   }
-  switchLang(e){
+  switchCapsKeys(){
+    let keysEl = document.querySelectorAll('.keyboard__key');
+    
+    let setts = this.genData.getDataLs();
+   
+    let isShift = setts.shift === 'shift' ? 0 : 1;
+    for(let keyEl of keysEl){
+      let valKey = dataKeys[setts.lang][keyEl.dataset.keyCode];
+     console.log(valKey, keyEl.dataset.keyCode)
+      if(Array.isArray(valKey)){
+        keyEl.textContent = valKey[isShift];
+      }
+      else{
+        if(setts.capsLock){
+          if(valKey.length == 1){
+            keyEl.textContent = valKey.toUpperCase();
+          }
+        }
+        else{
+          if(valKey.length == 1){
+            keyEl.textContent = valKey.toLowerCase();
+          }
+        }
+      }
+    }
+  }
+  switchShiftKeys(){
+    let keysEl = document.querySelectorAll('.keyboard__key');
+    
+    let setts = this.genData.getDataLs();
+    console.log(setts, 666)
+    let isShift = setts.shift === 'shift' ? 0 : 1;
+    for(let keyEl of keysEl){
+      let valKey = dataKeys[setts.lang][keyEl.dataset.keyCode];
+     
+      if(Array.isArray(valKey)){
+        keyEl.textContent = valKey[isShift];
+      }
+      else{
+        if(setts.shift === 'shift'){
+      
+          if(valKey.length == 1){
+            keyEl.textContent = valKey.toUpperCase();
+          }
+          else  keyEl.textContent = valKey;
+        }
+        else{
+          if(valKey.length == 1){
+            keyEl.textContent = valKey.toLowerCase();
+          }
+          else  keyEl.textContent = valKey;
+        }
+       
+      }
+    }
+  }
+  switchLang(e) {
     let setts = this.genData.getDataLs()
-    let valKey = keys[setts.lang][setts.capsLock][e.keyCode]
-    if(valKey === 'shift') this.keydownSpecKeys.push(valKey)
-    if(valKey === 'ctrl') this.keydownSpecKeys.push(valKey)
-    if(this.keydownSpecKeys.length > 2) (this.keydownSpecKeys).splice(0,2);
+    let valKey = keys[setts.lang][setts.shift][e.keyCode]
+    if (valKey === 'shift') this.keydownSpecKeys.push(valKey)
+    if (valKey === 'ctrl') this.keydownSpecKeys.push(valKey)
+    if (this.keydownSpecKeys.length > 2) (this.keydownSpecKeys).splice(0, 2);
 
-    if((this.keydownSpecKeys[this.keydownSpecKeys.length - 1] === 'shift' && this.keydownSpecKeys[this.keydownSpecKeys.length - 2] === 'ctrl') || (this.keydownSpecKeys[this.keydownSpecKeys.length - 2] === 'shift' && this.keydownSpecKeys[this.keydownSpecKeys.length - 1] === 'ctrl')){
-     console.log(7656789)
-      if(setts.lang === 'en'){
+    if ((this.keydownSpecKeys[this.keydownSpecKeys.length - 1] === 'shift' && this.keydownSpecKeys[this.keydownSpecKeys.length - 2] === 'ctrl') || (this.keydownSpecKeys[this.keydownSpecKeys.length - 2] === 'shift' && this.keydownSpecKeys[this.keydownSpecKeys.length - 1] === 'ctrl')) {
+      console.log(7656789)
+      if (setts.lang === 'en') {
         console.log(1)
         setts.lang = 'ru'
         this.genData.setDataLs(setts)
         this.genData.switchKeys()
-      } 
-      else{
+      }
+      else {
         console.log(2)
         setts.lang = 'en'
         this.genData.setDataLs(setts)
@@ -94,20 +162,20 @@ class ControlKeyboard{
       this.keydownSpecKeys = []
       // console.log(setts)
     }
-    
+
   }
-  addKeyActiveStyle(keyEl){
+  addKeyActiveStyle(keyEl) {
     keyEl.classList.add('keyboard__key_active')
-    setTimeout(()=>{
+    setTimeout(() => {
       keyEl.classList.remove('keyboard__key_active')
-    },200)
+    }, 200)
   }
-  windowClickHandler(e){
+  windowClickHandler(e) {
     let keyEl = e.target.closest('.keyboard__key');
-    if(keyEl) this.clickKeyHandler(keyEl)
-   
+    if (keyEl) this.clickKeyHandler(keyEl)
+
   }
-  
+
 }
 
 

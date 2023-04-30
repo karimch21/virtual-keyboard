@@ -1,12 +1,14 @@
-import {keys, keysView} from './keys';
+import {keys, keysView, dataKeys} from './keys';
 import ControlKeyboard from './useKeyboard';
 
 class GenerateKeyboard{
   constructor(){
     this.settings = {
-      lang: navigator.language,
-      capsLock: 'unshift',
-      content: `Input text`
+      lang: 'en',
+      capsLock: true,
+      shift: 'unshift',
+      content: `Input text`,
+
     }
   }
   init(){
@@ -16,10 +18,7 @@ class GenerateKeyboard{
     window.addEventListener('click',(e)=>{
       (new ControlKeyboard()).windowClickHandler(e);
     });
-    window.addEventListener('keyup', (e)=>{
-      (new ControlKeyboard()).keyupKeyHandler(e);
     
-    })
     
   }
   createKeyboard(){
@@ -30,11 +29,11 @@ class GenerateKeyboard{
     keyboardInnerEl.classList.add('keyboard__inner')
     let data = this.getDataLs();
     console.log(keysView)
-    for(let keysRow in keysView[data.lang][data.capsLock]){
+    for(let keysRow in keysView[data.lang][data.shift]){
       let keyRowEl = document.createElement('div');
       keyRowEl.classList.add('keyboard__row');
       
-      for(let key of keysView[data.lang][data.capsLock][keysRow]){
+      for(let key of keysView[data.lang][data.shift][keysRow]){
         let keyEl = document.createElement('div');
         keyEl.classList.add('keyboard__key');
         keyEl.textContent = key[1];
@@ -48,9 +47,18 @@ class GenerateKeyboard{
   }
   switchKeys(){
     let keysEl = document.querySelectorAll('.keyboard__key');
+    
     let setts = this.getDataLs();
+    console.log(setts, 666)
+    let isShift = setts.shift === 'shift' ? 0 : 1;
     for(let keyEl of keysEl){
-      keyEl.textContent = keys[setts.lang][setts.capsLock][keyEl.dataset.keyCode];
+      let valKey = dataKeys[setts.lang][keyEl.dataset.keyCode];
+     
+      if(Array.isArray(valKey)){
+        keyEl.textContent = valKey[isShift];
+      }
+      else keyEl.textContent = valKey;
+      
     }
   }
   createContentBlock(){
@@ -78,6 +86,9 @@ class GenerateKeyboard{
       let control = (new ControlKeyboard())
       window.addEventListener('keydown', (e)=>{
         control.keydownKeyHandler(e)
+      })
+      window.addEventListener('keyup', (e)=>{
+        control.keyupKeyHandler(e);
       })
     }
   }
