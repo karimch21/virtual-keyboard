@@ -80,5 +80,3 @@ class HandlingKeys {
 }
 
 export default HandlingKeys
-let a =`   k kkk&nbsp;i000`;
-document.body.innerText = a

@@ -6,7 +6,7 @@ import HandlingKeys from './handling'
 class ControlKeyboard {
   constructor() {
     this.genData = new GenerateKeyboard();
-    this.specialKey = ['tab', 'caps lock', 'alt', '', 'ctrl', 'backspace', "left", "down", "right", "shift", "up", "win", "enter", "space"];
+    this.specialKey = ['Tab', 'CapsLock', 'Alt', '', 'Ctrl', 'Backspace', "left", "down", "right", "Shift", "up", "win", "Enter", "Space"];
     this.keydownSpecKeys = []
     this.handlingKeys = new HandlingKeys();
   }
@@ -31,7 +31,7 @@ class ControlKeyboard {
     let data = null;
 
 
-    if (valKey === 'shift') {
+    if (valKey === 'Shift') {
       console.log('-------keyUp-------')
       data = this.handlingKeys.handlingShiftUp(setts, valKey, e.keyCode)
       console.log(data, 'data')
@@ -50,16 +50,16 @@ class ControlKeyboard {
 
     let data = null;
 
-    if (valKey === 'enter') {
+    if (valKey === 'Enter') {
       data = this.handlingKeys.handlingEnter(setts, valKey, keyCodeEl)
       this.genData.setDataLs(data)
     }
-    if (valKey === 'space') {
+    if (valKey === 'Space') {
       data = this.handlingKeys.handlingSpace(setts, valKey, keyCodeEl)
       this.genData.setDataLs(data)
     }
 
-    if (valKey === 'shift') {
+    if (valKey === 'Shift') {
       data = this.handlingKeys.handlingShift(setts, valKey, keyCodeEl)
       if (data) {
         this.genData.setDataLs(data)
@@ -68,7 +68,7 @@ class ControlKeyboard {
       return
     }
 
-    if (valKey === 'caps lock') {
+    if (valKey === 'CapsLock') {
       data = this.handlingKeys.handlingCaps(setts, valKey, keyCodeEl)
       if (data) {
         this.genData.setDataLs(data)
@@ -76,7 +76,7 @@ class ControlKeyboard {
       }
     }
 
-    if (valKey === 'backspace') {
+    if (valKey === 'Backspace') {
       data = this.handlingKeys.handlingBackspace(setts, valKey, keyCodeEl)
       if (data) {
         this.genData.setDataLs(data)
@@ -85,7 +85,7 @@ class ControlKeyboard {
       }
     }
 
-    if (valKey === 'tab') {
+    if (valKey === 'Tab') {
       data = this.handlingKeys.handlingTab(setts, valKey, keyCodeEl)
       if (data) {
         this.genData.setDataLs(data)
@@ -160,11 +160,11 @@ class ControlKeyboard {
   switchLang(e) {
     let setts = this.genData.getDataLs()
     let valKey = keys[setts.lang][setts.shift][e.keyCode]
-    if (valKey === 'shift') this.keydownSpecKeys.push(valKey)
-    if (valKey === 'ctrl') this.keydownSpecKeys.push(valKey)
+    if (valKey === 'Shift') this.keydownSpecKeys.push(valKey)
+    if (valKey === 'Ctrl') this.keydownSpecKeys.push(valKey)
     if (this.keydownSpecKeys.length > 2) (this.keydownSpecKeys).splice(0, 2);
 
-    if ((this.keydownSpecKeys[this.keydownSpecKeys.length - 1] === 'shift' && this.keydownSpecKeys[this.keydownSpecKeys.length - 2] === 'ctrl') || (this.keydownSpecKeys[this.keydownSpecKeys.length - 2] === 'shift' && this.keydownSpecKeys[this.keydownSpecKeys.length - 1] === 'ctrl')) {
+    if ((this.keydownSpecKeys[this.keydownSpecKeys.length - 1] === 'Shift' && this.keydownSpecKeys[this.keydownSpecKeys.length - 2] === 'Ctrl') || (this.keydownSpecKeys[this.keydownSpecKeys.length - 2] === 'Shift' && this.keydownSpecKeys[this.keydownSpecKeys.length - 1] === 'Ctrl')) {
       console.log(7656789)
       if (setts.lang === 'en') {
         console.log(1)

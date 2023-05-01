@@ -92,9 +92,24 @@ class GenerateKeyboard{
         control.keyupKeyHandler(e);
       })
     }
+    this.createHelpText()
   }
   showContent(){
     document.body.prepend(this.createContentBlock());
+  }
+  createHelpText(){
+    let helpTextWrap = document.createElement('div');
+    let helpTextOne = document.createElement('p');
+    let helpTextTwo = document.createElement('p');
+    helpTextWrap.classList.add('help-text');
+    helpTextOne.classList.add('help-text__one');
+    helpTextTwo.classList.add('help-text__two');
+    helpTextOne.textContent = 'Клавиатура создана в операционной системе Windows'
+    helpTextTwo.textContent = 'Для переключения языка комбинация: левыe ctrl + alt'
+    helpTextWrap.appendChild(helpTextOne);
+    helpTextWrap.appendChild(helpTextTwo);
+
+    document.body.appendChild(helpTextWrap);
   }
   changeWindowContent(data = this.getDataLs()){
     let contentBoxInner = document.querySelector('.content-box__inner');
