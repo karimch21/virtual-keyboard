@@ -6,7 +6,7 @@ import HandlingKeys from './handling'
 class ControlKeyboard {
   constructor() {
     this.genData = new GenerateKeyboard();
-    this.specialKey = ['tab', 'capslock', 'alt', '', 'ctrl', 'backspace', "left", "down", "right", "shift", "up", "win", "enter", "space"];
+    this.specialKey = ['tab', 'caps lock', 'alt', '', 'ctrl', 'backspace', "left", "down", "right", "shift", "up", "win", "enter", "space"];
     this.keydownSpecKeys = []
     this.handlingKeys = new HandlingKeys();
   }
@@ -16,14 +16,14 @@ class ControlKeyboard {
     this.changeContent(keyCodeEl)
   }
   keydownKeyHandler(e) {
-
+    e.preventDefault()
     this.switchLang(e)
     let keysEl = document.querySelector(`[data-key-code="${e.keyCode}"]`);
     this.addKeyActiveStyle(keysEl)
     this.changeContent(e.keyCode)
   }
   keyupKeyHandler(e) {
-
+    e.preventDefault()
     let setts = this.genData.getDataLs()
     let valKey = keys[setts.lang][setts.shift][e.keyCode]
     let keyEl = document.querySelector(`[data-key-code="${e.keyCode}"]`);
@@ -76,6 +76,24 @@ class ControlKeyboard {
       }
     }
 
+    if (valKey === 'backspace') {
+      data = this.handlingKeys.handlingBackspace(setts, valKey, keyCodeEl)
+      if (data) {
+        this.genData.setDataLs(data)
+        this.genData.changeWindowContent()
+        return
+      }
+    }
+
+    if (valKey === 'tab') {
+      data = this.handlingKeys.handlingTab(setts, valKey, keyCodeEl)
+      if (data) {
+        this.genData.setDataLs(data)
+        this.genData.changeWindowContent()
+        return
+      }
+    }
+
     if (!this.specialKey.includes(valKey) && setts) {
       setts.content += valKey;
       this.genData.setDataLs(setts)
@@ -89,6 +107,7 @@ class ControlKeyboard {
    
     let isShift = setts.shift === 'shift' ? 0 : 1;
     for(let keyEl of keysEl){
+      console.log(keyEl, keyEl.dataset.keyCode)
       let valKey = dataKeys[setts.lang][keyEl.dataset.keyCode];
      console.log(valKey, keyEl.dataset.keyCode)
       if(Array.isArray(valKey)){

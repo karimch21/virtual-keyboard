@@ -16,6 +16,7 @@ class GenerateKeyboard{
       this.loadDom()
     });
     window.addEventListener('click',(e)=>{
+      e.preventDefault();
       (new ControlKeyboard()).windowClickHandler(e);
     });
     
@@ -67,7 +68,7 @@ class GenerateKeyboard{
     windowContent.classList.add('content-box');
     windowContentInner.classList.add('content-box__inner');
     windowContent.appendChild(windowContentInner)
-    windowContentInner.textContent = (this.getDataLs()).content;
+    windowContentInner.innerHTML = (this.getDataLs()).content;
     return windowContent
   }
   setDataLs(data=this.settings){
@@ -98,7 +99,7 @@ class GenerateKeyboard{
   changeWindowContent(data = this.getDataLs()){
     let contentBoxInner = document.querySelector('.content-box__inner');
     if(!contentBoxInner) return
-    contentBoxInner.textContent = data.content;
+    contentBoxInner.innerHTML = data.content;
   }
 
 }
