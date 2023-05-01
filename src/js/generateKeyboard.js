@@ -5,7 +5,7 @@ class GenerateKeyboard{
   constructor(){
     this.settings = {
       lang: 'en',
-      capsLock: true,
+      capsLock: false,
       shift: 'unshift',
       content: `Input text`,
 
