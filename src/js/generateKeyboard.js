@@ -36,17 +36,15 @@ class GenerateKeyboard {
       for (const key of keysView[data.lang][data.shift][keysRow]) {
         const keyEl = document.createElement('div');
         keyEl.classList.add('keyboard__key');
-        if(key[1].toLowerCase() === 'space'){
-          keyEl.classList.add('keyboard__key-space')
+        if (key[1].toLowerCase() === 'space') {
+          keyEl.classList.add('keyboard__key-space');
           keyEl.textContent = '';
-        }
-        else keyEl.textContent = key[1];
+        } else keyEl.textContent = key[1];
 
-        if(this.getDataLs().capsLock){
-          if(key[1].toLowerCase() === 'capslock') keyEl.classList.add('keyboard__key_on')
+        if (this.getDataLs().capsLock) {
+          if (key[1].toLowerCase() === 'capslock') keyEl.classList.add('keyboard__key_on');
         }
-     
-       
+
         keyEl.dataset.keyCode = key[0];
         keyRowEl.appendChild(keyEl);
       }
@@ -67,13 +65,10 @@ class GenerateKeyboard {
 
       if (Array.isArray(valKey)) {
         keyEl.textContent = valKey[isShift];
-      } else{
-        if(valKey.toLowerCase() === 'space'){
-          console.log(1111, 'SPACE')
-          keyEl.textContent = '';
-        }
-        else keyEl.textContent = valKey;
-      } 
+      } else if (valKey.toLowerCase() === 'space') {
+        console.log(1111, 'SPACE');
+        keyEl.textContent = '';
+      } else keyEl.textContent = valKey;
     }
   }
 

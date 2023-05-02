@@ -80,7 +80,7 @@ class HandlingKeys {
     return setts;
   }
 
-  handlingDel(setts){
+  handlingDel(setts) {
 
   }
 }

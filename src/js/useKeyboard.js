@@ -44,11 +44,11 @@ class ControlKeyboard {
   changeContent(keyCodeEl) {
     const setts = this.genData.getDataLs();
     // const valKey = keys[setts.lang][setts.shift][keyCodeEl];
-   
-    const isShift = setts.shift === 'shift' ? 0 : 1; //for choice element from array, when shift down, 0 - shift=true;
+
+    const isShift = setts.shift === 'shift' ? 0 : 1; // for choice element from array, when shift down, 0 - shift=true;
     const valKey = Array.isArray(dataKeys[setts.lang][keyCodeEl]) ? (dataKeys[setts.lang][keyCodeEl])[isShift] : dataKeys[setts.lang][keyCodeEl];
-    console.log(valKey)
-    if(!valKey) return
+    console.log(valKey);
+    if (!valKey) return;
 
     let data = null;
 
@@ -64,7 +64,7 @@ class ControlKeyboard {
     if (valKey === 'Shift') {
       data = this.handlingKeys.handlingShift(setts, valKey, keyCodeEl);
       if (data) {
-        console.log(data.content)
+        console.log(data.content);
         this.genData.setDataLs(data);
         this.switchShiftKeys();
       }
@@ -76,8 +76,7 @@ class ControlKeyboard {
       if (data) {
         this.genData.setDataLs(data);
         this.switchCapsKeys();
-        this.switchActiveCaps(keyCodeEl)
-        
+        this.switchActiveCaps(keyCodeEl);
       }
     }
 
@@ -99,46 +98,43 @@ class ControlKeyboard {
       }
     }
 
-    if(valKey === 'Del'){
-      
+    if (valKey === 'Del') {
+
     }
 
     if (!this.specialKey.includes(valKey) && setts) {
-      let isShift = (this.genData.getDataLs().shift) === 'shift'?true:false;
-      let isCaps = this.genData.getDataLs().capsLock;
+      const isShift = (this.genData.getDataLs().shift) === 'shift';
+      const isCaps = this.genData.getDataLs().capsLock;
 
-      if(isShift && isCaps){
-        console.log(1)
+      if (isShift && isCaps) {
+        console.log(1);
         setts.content += valKey;
         this.genData.setDataLs(setts);
         this.genData.changeWindowContent();
-        return
+        return;
       }
-      if(!isShift && !isCaps){
-        console.log(2)
+      if (!isShift && !isCaps) {
+        console.log(2);
         setts.content += valKey;
         this.genData.setDataLs(setts);
         this.genData.changeWindowContent();
-        return
+        return;
       }
-      else{
-        console.log(3)
-        setts.content += valKey.toUpperCase();
-        this.genData.setDataLs(setts);
-        this.genData.changeWindowContent();
-        return
-      } 
-  
+
+      console.log(3);
+      setts.content += valKey.toUpperCase();
+      this.genData.setDataLs(setts);
+      this.genData.changeWindowContent();
+      return;
     }
     this.genData.changeWindowContent();
   }
 
-  switchActiveCaps(valKey){
-    let keyEl = document.querySelector(`[data-key-code="${valKey}"]`);
-    console.log(valKey)
-    if(keyEl){
-      
-      keyEl.classList.toggle('keyboard__key_on')
+  switchActiveCaps(valKey) {
+    const keyEl = document.querySelector(`[data-key-code="${valKey}"]`);
+    console.log(valKey);
+    if (keyEl) {
+      keyEl.classList.toggle('keyboard__key_on');
     }
   }
 
@@ -150,7 +146,7 @@ class ControlKeyboard {
     const isShift = setts.shift === 'shift' ? 0 : 1;
     for (const keyEl of keysEl) {
       const valKey = dataKeys[setts.lang][keyEl.dataset.keyCode];
-    
+
       if (Array.isArray(valKey)) {
         keyEl.textContent = valKey[isShift];
       } else if (setts.capsLock) {
@@ -175,12 +171,9 @@ class ControlKeyboard {
       } else if (setts.shift === 'shift') {
         if (valKey.length == 1) {
           keyEl.textContent = valKey.toUpperCase();
-        } else{
-          if(valKey.toLowerCase() === 'space'){
-            keyEl.textContent = '';
-          }
-          else keyEl.textContent = valKey;
-        }
+        } else if (valKey.toLowerCase() === 'space') {
+          keyEl.textContent = '';
+        } else keyEl.textContent = valKey;
       } else if (valKey.length == 1) {
         keyEl.textContent = valKey.toLowerCase();
       } else keyEl.textContent = valKey;
@@ -209,7 +202,7 @@ class ControlKeyboard {
   }
 
   addKeyActiveStyle(keyEl) {
-    if(keyEl){
+    if (keyEl) {
       keyEl.classList.add('keyboard__key_active');
       setTimeout(() => {
         keyEl.classList.remove('keyboard__key_active');
