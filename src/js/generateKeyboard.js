@@ -8,7 +8,6 @@ class GenerateKeyboard {
       capsLock: false,
       shift: 'unshift',
       content: 'Input text',
-
     };
   }
 
@@ -37,7 +36,12 @@ class GenerateKeyboard {
       for (const key of keysView[data.lang][data.shift][keysRow]) {
         const keyEl = document.createElement('div');
         keyEl.classList.add('keyboard__key');
-        keyEl.textContent = key[1];
+        if(key[1].toLowerCase() === 'space'){
+          keyEl.classList.add('keyboard__key-space')
+          keyEl.textContent = '';
+        }
+        else keyEl.textContent = key[1];
+       
         keyEl.dataset.keyCode = key[0];
         keyRowEl.appendChild(keyEl);
       }
@@ -110,7 +114,7 @@ class GenerateKeyboard {
     helpTextOne.classList.add('help-text__one');
     helpTextTwo.classList.add('help-text__two');
     helpTextOne.textContent = 'Клавиатура создана в операционной системе Windows';
-    helpTextTwo.textContent = 'Для переключения языка комбинация: левыe ctrl + alt';
+    helpTextTwo.textContent = 'Для переключения языка комбинация: ctrl + shift';
     helpTextWrap.appendChild(helpTextOne);
     helpTextWrap.appendChild(helpTextTwo);
 

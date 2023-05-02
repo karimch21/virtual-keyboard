@@ -76,7 +76,7 @@ class HandlingKeys {
   }
 
   handlingSpace(setts, valKey, keyCodeEl) {
-    setts.content += ' ';
+    setts.content += '&nbsp;';
     return setts;
   }
 }

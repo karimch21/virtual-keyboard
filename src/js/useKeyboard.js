@@ -5,7 +5,7 @@ import HandlingKeys from './handling';
 class ControlKeyboard {
   constructor() {
     this.genData = new GenerateKeyboard();
-    this.specialKey = ['Tab', 'CapsLock', 'Alt', '', 'Ctrl', 'Backspace', 'left', 'down', 'right', 'Shift', 'up', 'win', 'Enter', 'Space'];
+    this.specialKey = ['Tab', 'CapsLock', 'Alt', '', 'Ctrl', 'Backspace', 'Left', 'Down', 'Right', 'Shift', 'Up', 'Win', 'Enter', 'Space', 'Del'];
     this.keydownSpecKeys = [];
     this.handlingKeys = new HandlingKeys();
   }
