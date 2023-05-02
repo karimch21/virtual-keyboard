@@ -79,6 +79,10 @@ class HandlingKeys {
     setts.content += '&nbsp;';
     return setts;
   }
+
+  handlingDel(setts){
+
+  }
 }
 
 export default HandlingKeys;

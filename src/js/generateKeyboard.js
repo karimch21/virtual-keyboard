@@ -62,7 +62,13 @@ class GenerateKeyboard {
 
       if (Array.isArray(valKey)) {
         keyEl.textContent = valKey[isShift];
-      } else keyEl.textContent = valKey;
+      } else{
+        if(valKey.toLowerCase() === 'space'){
+          console.log(1111, 'SPACE')
+          keyEl.textContent = '';
+        }
+        else keyEl.textContent = valKey;
+      } 
     }
   }
 

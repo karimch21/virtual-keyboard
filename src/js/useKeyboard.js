@@ -33,21 +33,22 @@ class ControlKeyboard {
     let data = null;
 
     if (valKey === 'Shift') {
-      console.log('-------keyUp-------');
       data = this.handlingKeys.handlingShiftUp(setts, valKey, e.keyCode);
-      console.log(data, 'data');
       if (data) {
-        console.log(77);
         this.genData.setDataLs(data);
         this.genData.switchKeys();
       }
-      console.log('END-------keyUp-------');
     }
   }
 
   changeContent(keyCodeEl) {
     const setts = this.genData.getDataLs();
-    const valKey = keys[setts.lang][setts.shift][keyCodeEl];
+    // const valKey = keys[setts.lang][setts.shift][keyCodeEl];
+   
+    const isShift = setts.shift === 'shift' ? 0 : 1; //for choice element from array, when shift down, 0 - shift=true;
+    const valKey = Array.isArray(dataKeys[setts.lang][keyCodeEl]) ? (dataKeys[setts.lang][keyCodeEl])[isShift] : dataKeys[setts.lang][keyCodeEl];
+    console.log(valKey)
+    if(!valKey) return
 
     let data = null;
 
@@ -63,6 +64,7 @@ class ControlKeyboard {
     if (valKey === 'Shift') {
       data = this.handlingKeys.handlingShift(setts, valKey, keyCodeEl);
       if (data) {
+        console.log(data.content)
         this.genData.setDataLs(data);
         this.switchShiftKeys();
       }
@@ -74,6 +76,8 @@ class ControlKeyboard {
       if (data) {
         this.genData.setDataLs(data);
         this.switchCapsKeys();
+        this.switchActiveCaps(keyCodeEl)
+        
       }
     }
 
@@ -95,11 +99,47 @@ class ControlKeyboard {
       }
     }
 
+    if(valKey === 'Del'){
+      
+    }
+
     if (!this.specialKey.includes(valKey) && setts) {
-      setts.content += valKey;
-      this.genData.setDataLs(setts);
+      let isShift = (this.genData.getDataLs().shift) === 'shift'?true:false;
+      let isCaps = this.genData.getDataLs().capsLock;
+
+      if(isShift && isCaps){
+        console.log(1)
+        setts.content += valKey;
+        this.genData.setDataLs(setts);
+        this.genData.changeWindowContent();
+        return
+      }
+      if(!isShift && !isCaps){
+        console.log(2)
+        setts.content += valKey;
+        this.genData.setDataLs(setts);
+        this.genData.changeWindowContent();
+        return
+      }
+      else{
+        console.log(3)
+        setts.content += valKey.toUpperCase();
+        this.genData.setDataLs(setts);
+        this.genData.changeWindowContent();
+        return
+      } 
+  
     }
     this.genData.changeWindowContent();
+  }
+
+  switchActiveCaps(valKey){
+    let keyEl = document.querySelector(`[data-key-code="${valKey}"]`);
+    console.log(valKey)
+    if(keyEl){
+      
+      keyEl.classList.toggle('keyboard__key_on')
+    }
   }
 
   switchCapsKeys() {
@@ -109,9 +149,8 @@ class ControlKeyboard {
 
     const isShift = setts.shift === 'shift' ? 0 : 1;
     for (const keyEl of keysEl) {
-      console.log(keyEl, keyEl.dataset.keyCode);
       const valKey = dataKeys[setts.lang][keyEl.dataset.keyCode];
-      console.log(valKey, keyEl.dataset.keyCode);
+    
       if (Array.isArray(valKey)) {
         keyEl.textContent = valKey[isShift];
       } else if (setts.capsLock) {
@@ -126,9 +165,7 @@ class ControlKeyboard {
 
   switchShiftKeys() {
     const keysEl = document.querySelectorAll('.keyboard__key');
-
     const setts = this.genData.getDataLs();
-    console.log(setts, 666);
     const isShift = setts.shift === 'shift' ? 0 : 1;
     for (const keyEl of keysEl) {
       const valKey = dataKeys[setts.lang][keyEl.dataset.keyCode];
@@ -138,7 +175,12 @@ class ControlKeyboard {
       } else if (setts.shift === 'shift') {
         if (valKey.length == 1) {
           keyEl.textContent = valKey.toUpperCase();
-        } else keyEl.textContent = valKey;
+        } else{
+          if(valKey.toLowerCase() === 'space'){
+            keyEl.textContent = '';
+          }
+          else keyEl.textContent = valKey;
+        }
       } else if (valKey.length == 1) {
         keyEl.textContent = valKey.toLowerCase();
       } else keyEl.textContent = valKey;
@@ -153,28 +195,26 @@ class ControlKeyboard {
     if (this.keydownSpecKeys.length > 2) (this.keydownSpecKeys).splice(0, 2);
 
     if ((this.keydownSpecKeys[this.keydownSpecKeys.length - 1] === 'Shift' && this.keydownSpecKeys[this.keydownSpecKeys.length - 2] === 'Ctrl') || (this.keydownSpecKeys[this.keydownSpecKeys.length - 2] === 'Shift' && this.keydownSpecKeys[this.keydownSpecKeys.length - 1] === 'Ctrl')) {
-      console.log(7656789);
       if (setts.lang === 'en') {
-        console.log(1);
         setts.lang = 'ru';
         this.genData.setDataLs(setts);
         this.genData.switchKeys();
       } else {
-        console.log(2);
         setts.lang = 'en';
         this.genData.setDataLs(setts);
         this.genData.switchKeys();
       }
       this.keydownSpecKeys = [];
-      // console.log(setts)
     }
   }
 
   addKeyActiveStyle(keyEl) {
-    keyEl.classList.add('keyboard__key_active');
-    setTimeout(() => {
-      keyEl.classList.remove('keyboard__key_active');
-    }, 200);
+    if(keyEl){
+      keyEl.classList.add('keyboard__key_active');
+      setTimeout(() => {
+        keyEl.classList.remove('keyboard__key_active');
+      }, 200);
+    }
   }
 
   windowClickHandler(e) {
