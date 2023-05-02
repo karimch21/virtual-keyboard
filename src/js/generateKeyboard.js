@@ -41,6 +41,11 @@ class GenerateKeyboard {
           keyEl.textContent = '';
         }
         else keyEl.textContent = key[1];
+
+        if(this.getDataLs().capsLock){
+          if(key[1].toLowerCase() === 'capslock') keyEl.classList.add('keyboard__key_on')
+        }
+     
        
         keyEl.dataset.keyCode = key[0];
         keyRowEl.appendChild(keyEl);
